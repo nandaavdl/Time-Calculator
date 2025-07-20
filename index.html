@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>TIME UNIT CALCULATOR</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script> <!-- Tailwind CDN -->
+</head>
+<body class="bg-pink-400 min-h-screen flex items-center justify-center">
+
+  <div class="bg-white p-6 rounded-xl shadow-lg w-full max-w-md">
+    <h1 class="text-2xl font-bold mb-4 text-center">TIME UNIT CALCULATOR</h1>
+
+    <input type="number" id="nilaiWaktu" placeholder="Enter Value"
+      class="bg-pink-100 w-full p-2 border rounded-lg mb-3">
+
+    <div class="flex space-x-2 mb-3">
+      <select id="dari" class="flex-1 p-2 border rounded-lg bg-pink-100">
+        <option value="hour">Hour</option>
+        <option value="minute">Minute</option>
+        <option value="second">Second</option>
+        <option value="day">Day</option>
+        <option value="week">Week</option>
+        <option value="month">Month</option>
+        <option value="year">Year</option>
+        <option value="century">Century</option>
+      </select>
+
+      <select id="ke" class="flex-1 p-2 border rounded-lg bg-pink-100">
+        <option value="hour">Hour</option>
+        <option value="minute">Minute</option>
+        <option value="second">Second</option>
+        <option value="day">Day</option>
+        <option value="week">Week</option>
+        <option value="month">Month</option>
+        <option value="year">Year</option>
+        <option value="century">Century</option>
+      </select>
+    </div>
+    
+    <button onclick="konversiWaktu()" class="w-full bg-pink-500 text-white p-2 rounded-lg hover:bg-pink-600">
+      CONVERT
+    </button>
+
+    <div id="popupModal" class="fixed inset-0 flex items-center justify-center bg-pink-400 bg-opacity-50 hidden">
+  <div class="bg-white rounded-xl p-6 shadow-lg max-w-sm w-full text-center">
+    <h2 class="text-xl font-bold mb-4">Conversion Results</h2>
+    <p id="popupContent" class="text-gray-700 mb-4"></p>
+    <button id="thBtn" onclick="tutupPopup()" class="bg-pink-500 text-white px-4 py-2 rounded hover:bg-pink-600">Thank You!</button>
+    <button id="okBtn" onclick="tutupPopup()" class="bg-pink-500 text-white px-4 py-2 rounded hover:bg-pink-600">OK</button>
+</div>
+</div>
+
+    <div id="hasil" class="mt-4 text-center font-semibold text-gray-700"></div>
+  </div>
+
+  <script>
+    function konversiWaktu() {
+      var nilaiInput = document.getElementById('nilaiWaktu').value;
+      var nilai = parseFloat(nilaiInput);
+      var dari = document.getElementById('dari').value;
+      var ke = document.getElementById('ke').value;
+      var hasil;
+        
+      function plural(unit, value) {
+        return value === 1 ? unit : unit + "s";
+    }
+        if (!nilaiInput || isNaN(nilai)) {
+      tampilkanPopup("Enter Value First!", false);
+      return;
+    }
+      var dalamDetik;
+      switch (dari) {
+        case "second": dalamDetik = nilai; break;
+        case "minute": dalamDetik = nilai * 60; break;
+        case "hour": dalamDetik = nilai * 3600; break;
+        case "day": dalamDetik = nilai * 86400; break;
+        case "week": dalamDetik = nilai * 604800; break;
+        case "month": dalamDetik = nilai * 2629800; break; // rata-rata 30.44 hari
+        case "year": dalamDetik = nilai * 31557600; break; // 365.25 hari
+        case "century": dalamDetik = nilai * 3155760000; break; // 100 tahun
+    }
+      switch (ke) {
+        case "second": hasil = dalamDetik; break;
+        case "minute": hasil = dalamDetik / 60; break;
+        case "hour": hasil = dalamDetik / 3600; break;
+        case "day": hasil = dalamDetik / 86400; break;
+        case "week": hasil = dalamDetik / 604800; break;
+        case "month": hasil = dalamDetik / 2629800; break;
+        case "year": hasil = dalamDetik / 31557600; break;
+        case "century": hasil = dalamDetik / 3155760000; break;
+    }
+        let hasilTampil = Number.isInteger(hasil) ? hasil : hasil.toFixed(2);
+        // document.getElementById("popupContent").innerText = 
+        let text = nilai + " " + plural(dari, nilai) + " = " + hasilTampil + " " + plural(ke, hasil);
+        tampilkanPopup(text, true);
+    }
+        // Fungsi menampilkan popup
+    function tampilkanPopup(teks, isHasil) {
+        document.getElementById("popupContent").innerText = teks;
+        document.getElementById("popupModal").classList.remove("hidden");
+
+        // Tampilkan tombol sesuai kondisi
+        document.getElementById("thBtn").classList.toggle("hidden", !isHasil);
+        document.getElementById("okBtn").classList.toggle("hidden", isHasil);
+    }
+
+    // Fungsi menutup popup
+    function tutupPopup() {
+        document.getElementById("popupModal").classList.add("hidden");
+    }
+  </script>
+
+</body>
+</html>
